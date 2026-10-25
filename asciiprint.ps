@@ -1,0 +1,48 @@
+%!-Adobe-1.0
+%%Title: asciiprint.ps
+%%Creator: Ben Cranston 
+%%CreationDate: Thu Feb 8 1990
+%%Pages 0
+
+/Courier findfont 10 scalefont setfont
+/colwid (m) stringwidth pop def
+36 756 moveto
+256 string
+{ %exec
+   { %loop over file
+      dup currentfile exch readstring exch
+      { %loop FF
+         (\f) search exch
+         { %loop LF
+            (\n) search exch
+            { %loop CR
+               (\r) search exch
+               { %loop TAB
+                  (\t) search exch
+                  { %loop BS
+                     (\b) search exch
+                     show
+                     not { exit } if
+                     pop currentpoint exch colwid sub exch moveto
+                  } loop %BS
+                  not { exit } if
+                  pop currentpoint exch 36 sub colwid div .49 add cvi
+                  8 add dup 8 mod sub colwid mul 36 add exch moveto
+               } loop %TAB
+               not { exit } if
+               pop 36 currentpoint exch pop moveto
+            } loop %CR
+            not { exit } if
+            pop 36 currentpoint exch pop
+            11 sub dup 25 le { %if
+               pop showpage 756
+            } if
+            moveto
+         } loop %LF
+         not { exit } if
+         pop showpage 36 756 moveto
+      } loop %FF
+      not { exit } if
+   } loop %over file
+   pop showpage
+} bind exec
